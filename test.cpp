@@ -6,37 +6,47 @@
 #include "fn/filter.h"
 #include "fn/fmap.h"
 #include "fn/reduce.h"
+#include "fn/to.h"
 
 #include "fit/placeholders.h"
 
+using namespace fit;
+using namespace fn;
 using namespace std;
 
 int main() {
 
     // vector
     cout << "vector" << endl;
-    std::vector<int> vectorValues = { 1, 2, 3, 4, 5 };
+    vector<int> vectorValues = { 1, 2, 3, 4, 5 };
 
     int vectorSum = vectorValues
-        | fn::filter(fit::_1 > 1)
-        | fn::fmap(fit::_1 * 10)
-        | fn::each([] (auto val) { cout << val << endl; })
-        | fn::reduce(fit::_1 + fit::_2);
+        | filter(_1 > 1)
+        | to(type<set>())
+        | to(type<list>())
+        | fmap(_1 * 10)
+        | each([] (auto val) { cout << val << endl; })
+        | reduce(_1 + _2);
 
     cout << vectorSum << endl;
     cout << endl;
+
+    vector<int*> pointers;
+    auto uniqueAddresses = pointers
+        | to(type<set>())
+        | to(type<list>());
 
 
 
     // list
     cout << "list" << endl;
-    std::list<int> listValues = { 1, 2, 3, 4, 5 };
+    list<int> listValues = { 1, 2, 3, 4, 5 };
 
     int listSum = listValues
-        | fn::filter(fit::_1 > 1)
-        | fn::fmap(fit::_1 * 10)
-        | fn::each([] (auto val) { cout << val << endl; })
-        | fn::reduce(fit::_1 + fit::_2, 1000);
+        | filter(_1 > 1)
+        | fmap(_1 * 10)
+        | each([] (auto val) { cout << val << endl; })
+        | reduce(_1 + _2, 1000);
 
     cout << listSum << endl;
     cout << endl;
@@ -45,13 +55,13 @@ int main() {
 
     // set
     cout << "set" << endl;
-    std::set<int> setValues = { 1, 2, 3, 4, 5 };
+    set<int> setValues = { 1, 2, 3, 4, 5 };
 
     int setSum = setValues
-        | fn::filter(fit::_1 > 1)
-        | fn::fmap(fit::_1 * 10)
-        | fn::each([] (auto val) { cout << val << endl; })
-        | fn::reduce(fit::_1 + fit::_2);
+        | filter(_1 > 1)
+        | fmap(_1 * 10)
+        | each([] (auto val) { cout << val << endl; })
+        | reduce(_1 + _2);
 
 
     cout << setSum << endl;
@@ -61,15 +71,15 @@ int main() {
 
     // map
     cout << "map" << endl;
-    std::map<int, int> mapValues =
+    map<int, int> mapValues =
         { make_pair(1, 1), make_pair(2, 2), make_pair(3, 3),
           make_pair(4, 4), make_pair(5, 5) };
 
     int mapSum = mapValues
-        | fn::filter(fn::on_map_value(fit::_1 > 1))
-        | fn::fmap(fn::on_map_value(fit::_1 * 10))
-        | fn::each(fn::on_map_value([] (auto val) { cout << val << endl; }))
-        | fn::reduce(fn::on_map_value(fit::_1 + fit::_2), 1000);
+        | filter(on_map_value(_1 > 1))
+        | fmap(on_map_value(_1 * 10))
+        | each(on_map_value([] (auto val) { cout << val << endl; }))
+        | reduce(on_map_value(_1 + _2), 1000);
 
     cout << mapSum << endl;
     cout << endl;
