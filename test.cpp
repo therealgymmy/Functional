@@ -5,6 +5,7 @@
 #include "fn/each.h"
 #include "fn/filter.h"
 #include "fn/fmap.h"
+#include "fn/reduce.h"
 
 #include "fit/placeholders.h"
 
@@ -16,10 +17,14 @@ int main() {
     cout << "vector" << endl;
     std::vector<int> vectorValues = { 1, 2, 3, 4, 5 };
 
-    vectorValues
+    int vectorSum = vectorValues
         | fn::filter(fit::_1 > 1)
         | fn::fmap(fit::_1 * 10)
-        | fn::each([] (auto val) { cout << val << endl; });
+        | fn::each([] (auto val) { cout << val << endl; })
+        | fn::reduce(fit::_1 + fit::_2);
+
+    cout << vectorSum << endl;
+    cout << endl;
 
 
 
@@ -27,10 +32,14 @@ int main() {
     cout << "list" << endl;
     std::list<int> listValues = { 1, 2, 3, 4, 5 };
 
-    listValues
+    int listSum = listValues
         | fn::filter(fit::_1 > 1)
         | fn::fmap(fit::_1 * 10)
-        | fn::each([] (auto val) { cout << val << endl; });
+        | fn::each([] (auto val) { cout << val << endl; })
+        | fn::reduce(fit::_1 + fit::_2, 1000);
+
+    cout << listSum << endl;
+    cout << endl;
 
 
 
@@ -38,10 +47,15 @@ int main() {
     cout << "set" << endl;
     std::set<int> setValues = { 1, 2, 3, 4, 5 };
 
-    setValues
+    int setSum = setValues
         | fn::filter(fit::_1 > 1)
         | fn::fmap(fit::_1 * 10)
-        | fn::each([] (auto val) { cout << val << endl; });
+        | fn::each([] (auto val) { cout << val << endl; })
+        | fn::reduce(fit::_1 + fit::_2);
+
+
+    cout << setSum << endl;
+    cout << endl;
 
 
 
@@ -51,9 +65,13 @@ int main() {
         { make_pair(1, 1), make_pair(2, 2), make_pair(3, 3),
           make_pair(4, 4), make_pair(5, 5) };
 
-    mapValues
+    int mapSum = mapValues
         | fn::filter(fn::on_map_value(fit::_1 > 1))
         | fn::fmap(fn::on_map_value(fit::_1 * 10))
-        | fn::each(fn::on_map_value([] (auto val) { cout << val << endl; }));
+        | fn::each(fn::on_map_value([] (auto val) { cout << val << endl; }))
+        | fn::reduce(fn::on_map_value(fit::_1 + fit::_2), 1000);
+
+    cout << mapSum << endl;
+    cout << endl;
 
 }

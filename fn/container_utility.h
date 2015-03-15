@@ -45,6 +45,17 @@ FIT_STATIC_FUNCTION(on_map_value) = ::fit::partial(::fit::conditional(
         )
     ) {
         return ::std::make_pair(pair.first, func(pair.second));
+    },
+
+    // specialization for func being a BinaryFunction
+    // assumed to be used with `reduce`
+    [] (auto func, auto init, auto pair,
+        REQUIRES(
+            ::std::is_same<decltype(func(init, pair.second)),
+                           decltype(init)>::value
+        )
+    ) {
+        return func(init, pair.second);
     }
 
 ));

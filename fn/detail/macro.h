@@ -1,7 +1,16 @@
 #ifndef __FN_DETAIL_MACRO__
 #define __FN_DETAIL_MACRO__
 
-#define REQUIRES(...) typename std::enable_if<(__VA_ARGS__), int>::type = 0
+namespace fn {
+namespace detail {
+
+struct Dummy {};
+
+}
+}
+
+#define REQUIRES(...) \
+    typename std::enable_if<(__VA_ARGS__), ::fn::detail::Dummy>::type = {}
 
 #define X_TO_STRING(s) TO_STRING(s)
 #define TO_STRING(s) #s
