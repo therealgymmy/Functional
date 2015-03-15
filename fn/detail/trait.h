@@ -12,13 +12,19 @@
 #include "misc_helper.h"
 
 #define DEFINE_IS_CONTAINER(Name, Type) \
-    template<typename C> \
+    template <typename C> \
     struct Name : std::false_type {}; \
-    template<typename... Ts> \
+    template <typename... Ts> \
     struct Name<Type<Ts...>>: std::true_type {}
 
 namespace fn {
 namespace detail {
+
+template <template <typename...> class C1, template <typename...> class C2>
+struct is_same_template : std::false_type {};
+
+template <template <typename...> class C>
+struct is_same_template<C, C> : std::false_type {};
 
 DEFINE_IS_CONTAINER(is_array,        ::std::array);
 DEFINE_IS_CONTAINER(is_deque,        ::std::deque);

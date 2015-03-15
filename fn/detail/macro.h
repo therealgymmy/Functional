@@ -18,4 +18,8 @@ struct Dummy {};
 #define CONCAT(a,b) CONCAT_HIDDEN(a,b)
 #define CONCAT_HIDDEN(a,b) a ## b
 
+#define LOCATION "file: " __FILE__ ", line: " X_TO_STRING(__LINE__)
+
+#define STATIC_ASSERT(...) static_assert((__VA_ARGS__), LOCATION)
+
 #endif

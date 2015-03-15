@@ -1,5 +1,10 @@
+#include <cassert>
 #include <iostream>
+#include <string>
+#include <type_traits>
 #include <vector>
+
+#include "fn/detail/macro.h"
 
 #include "fn/container_utility.h"
 #include "fn/each.h"
@@ -13,6 +18,71 @@
 using namespace fit;
 using namespace fn;
 using namespace std;
+
+template <template <typename...> class C, typename... Ts>
+constexpr bool test_specialized_container_t() {
+    return
+        is_same<
+            C<Ts...>,
+            ::fn::detail::specialized_container_t<
+                decltype(type<C>()),
+                Ts...
+            >
+        >::value;
+}
+
+void test_trait() {
+
+    //
+    // Test specialized_container_t returns the right contianer type
+    //
+
+    STATIC_ASSERT(test_specialized_container_t<vector, int>());
+    STATIC_ASSERT(test_specialized_container_t<vector, int*>());
+
+    STATIC_ASSERT(test_specialized_container_t<vector, vector<int>>());
+    STATIC_ASSERT(test_specialized_container_t<vector, vector<int*>>());
+
+    STATIC_ASSERT(test_specialized_container_t<vector, vector<int>*>());
+    STATIC_ASSERT(test_specialized_container_t<vector, vector<int*>*>());
+
+    STATIC_ASSERT(test_specialized_container_t<vector, const int>());
+    STATIC_ASSERT(test_specialized_container_t<vector, const int*>());
+
+    STATIC_ASSERT(test_specialized_container_t<vector, const vector<int>>());
+    STATIC_ASSERT(test_specialized_container_t<vector, const vector<int*>>());
+
+    STATIC_ASSERT(test_specialized_container_t<vector, const vector<int>*>());
+    STATIC_ASSERT(test_specialized_container_t<vector, const vector<int*>*>());
+
+    STATIC_ASSERT(test_specialized_container_t<set, int>());
+    STATIC_ASSERT(test_specialized_container_t<set, int*>());
+
+    STATIC_ASSERT(test_specialized_container_t<set, vector<int>>());
+    STATIC_ASSERT(test_specialized_container_t<set, vector<int*>>());
+
+    STATIC_ASSERT(test_specialized_container_t<set, vector<int>*>());
+    STATIC_ASSERT(test_specialized_container_t<set, vector<int*>*>());
+
+    STATIC_ASSERT(test_specialized_container_t<set, const int>());
+    STATIC_ASSERT(test_specialized_container_t<set, const int*>());
+
+    STATIC_ASSERT(test_specialized_container_t<set, const vector<int>>());
+    STATIC_ASSERT(test_specialized_container_t<set, const vector<int*>>());
+
+    STATIC_ASSERT(test_specialized_container_t<set, const vector<int>*>());
+    STATIC_ASSERT(test_specialized_container_t<set, const vector<int*>*>());
+
+    STATIC_ASSERT(test_specialized_container_t<map, int, int>());
+    STATIC_ASSERT(test_specialized_container_t<map, int, int*>());
+
+    STATIC_ASSERT(test_specialized_container_t<map, string, const vector<int>>());
+    STATIC_ASSERT(test_specialized_container_t<map, string, const vector<int*>>());
+
+    STATIC_ASSERT(test_specialized_container_t<map, const string, vector<int>*>());
+    STATIC_ASSERT(test_specialized_container_t<map, const string, vector<int*>*>());
+
+}
 
 int main() {
 

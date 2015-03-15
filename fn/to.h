@@ -16,10 +16,23 @@ namespace detail {
 template <template <typename...> class C>
 struct ContainerFactory {
     template <typename... Ts>
-    auto gen() -> C<Ts...> {
-        return C<Ts...> {};
+    using gen_t = C<Ts...>;
+
+    template <typename... Ts>
+    auto gen() {
+        return gen_t<Ts...> {};
     }
 };
+
+template <typename C>
+struct extract_container_type : std::false_type {};
+
+template <template <typename...> class C>
+struct extract_container_type<ContainerFactory<C>> : ContainerFactory<C> {};
+
+template <typename T, typename... Ts>
+using specialized_container_t =
+    typename extract_container_type<T>::template gen_t<Ts...>;
 
 }
 
@@ -29,9 +42,12 @@ auto type() -> detail::ContainerFactory<C> {
 }
 
 #define TYPE(factory, input) \
-    decltype(factory.template \
-        gen<::std::remove_reference_t< \
-            typename decltype(input)::value_type>>())
+    detail::specialized_container_t< \
+        decltype(factory), \
+        ::std::remove_cv_t<::std::remove_reference_t< \
+            decltype(*::std::begin(input)) \
+        >> \
+    >
 
 FIT_STATIC_FUNCTION(to) = ::fit::pipable(::fit::conditional(
 
