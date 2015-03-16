@@ -26,6 +26,12 @@ struct is_same_template : std::false_type {};
 template <template <typename...> class C>
 struct is_same_template<C, C> : std::false_type {};
 
+template <typename T>
+struct is_function_template : std::false_type {};
+
+template <template <typename...> class Func, typename... Ts>
+struct is_function_template<Func<Ts...>> : std::true_type {};
+
 DEFINE_IS_CONTAINER(is_array,        ::std::array);
 DEFINE_IS_CONTAINER(is_deque,        ::std::deque);
 DEFINE_IS_CONTAINER(is_forward_list, ::std::forward_list);

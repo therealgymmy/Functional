@@ -10,6 +10,8 @@
 #include "fn/each.h"
 #include "fn/filter.h"
 #include "fn/fmap.h"
+#include "fn/lookup.h"
+#include "fn/maybe.h"
 #include "fn/reduce.h"
 #include "fn/to.h"
 
@@ -97,6 +99,10 @@ int main() {
         | fmap(_1 * 10)
         | each([] (auto val) { cout << val << endl; })
         | reduce(_1 + _2);
+
+    int vectorLookupByVal  = vectorValues | lookup(4) | ok;
+    int vectorLookupByFunc = vectorValues | lookup(_1 == 4) | ok;
+    assert(vectorLookupByVal == vectorLookupByFunc);
 
     cout << vectorSum << endl;
     cout << endl;
