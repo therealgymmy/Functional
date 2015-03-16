@@ -11,39 +11,33 @@
 
 #include "misc_helper.h"
 
-#define DEFINE_IS_CONTAINER(Name, Type) \
-    template <typename C> \
-    struct Name : std::false_type {}; \
-    template <typename... Ts> \
-    struct Name<Type<Ts...>>: std::true_type {}
-
 namespace fn {
 namespace detail {
 
 template <template <typename...> class C1, template <typename...> class C2>
-struct is_same_template : std::false_type {};
+struct is_same_template : ::std::false_type {};
 
 template <template <typename...> class C>
-struct is_same_template<C, C> : std::false_type {};
+struct is_same_template<C, C> : ::std::false_type {};
 
 template <typename T>
-struct is_function_template : std::false_type {};
+struct is_function_template : ::std::false_type {};
 
 template <template <typename...> class Func, typename... Ts>
-struct is_function_template<Func<Ts...>> : std::true_type {};
+struct is_function_template<Func<Ts...>> : ::std::true_type {};
 
-DEFINE_IS_CONTAINER(is_array,        ::std::array);
-DEFINE_IS_CONTAINER(is_deque,        ::std::deque);
-DEFINE_IS_CONTAINER(is_forward_list, ::std::forward_list);
-DEFINE_IS_CONTAINER(is_list,         ::std::list);
-DEFINE_IS_CONTAINER(is_map,          ::std::map);
-DEFINE_IS_CONTAINER(is_multimap,     ::std::multimap);
-DEFINE_IS_CONTAINER(is_multiset,     ::std::multiset);
-DEFINE_IS_CONTAINER(is_vector,       ::std::vector);
-DEFINE_IS_CONTAINER(is_set,          ::std::set);
+DEFINE_IS_TEMPLATE(is_array,        ::std::array);
+DEFINE_IS_TEMPLATE(is_deque,        ::std::deque);
+DEFINE_IS_TEMPLATE(is_forward_list, ::std::forward_list);
+DEFINE_IS_TEMPLATE(is_list,         ::std::list);
+DEFINE_IS_TEMPLATE(is_map,          ::std::map);
+DEFINE_IS_TEMPLATE(is_multimap,     ::std::multimap);
+DEFINE_IS_TEMPLATE(is_multiset,     ::std::multiset);
+DEFINE_IS_TEMPLATE(is_vector,       ::std::vector);
+DEFINE_IS_TEMPLATE(is_set,          ::std::set);
 
 template <typename T>
-constexpr bool is_sequence_container() {
+constexpr bool is_sequence_container_func() {
     return or_args(
         is_array<T>::value,
         is_deque<T>::value,
@@ -54,7 +48,7 @@ constexpr bool is_sequence_container() {
 }
 
 template <typename T>
-constexpr bool is_associative_container() {
+constexpr bool is_associative_container_func() {
     return or_args(
         is_set<T>::value,
         is_map<T>::value,
@@ -64,16 +58,29 @@ constexpr bool is_associative_container() {
 }
 
 template <typename T>
-constexpr bool is_container() {
+constexpr bool is_container_func() {
     return or_args(
-        is_sequence_container<T>(),
-        is_associative_container<T>()
+        is_sequence_container_func<T>(),
+        is_associative_container_func<T>()
     );
 }
 
-}
-}
+template <typename T>
+struct is_sequence_container {
+    static constexpr bool value = is_sequence_container_func<T>();
+};
 
-#undef DEFINE_IS_CONTAINER
+template <typename T>
+struct is_associative_container {
+    static constexpr bool value = is_associative_container_func<T>();
+};
+
+template <typename T>
+struct is_container {
+    static constexpr bool value = is_container_func<T>();
+};
+
+}
+}
 
 #endif

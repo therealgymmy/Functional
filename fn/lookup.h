@@ -19,7 +19,7 @@ FIT_STATIC_FUNCTION(lookup) = ::fit::pipable(::fit::conditional(
     [] (auto input, auto func,
 
         REQUIRES(
-            detail::is_container<decltype(input)>(),
+            detail::is_container<decltype(input)>::value,
             detail::is_function_template<decltype(func)>::value
         )
     ) {
@@ -44,7 +44,7 @@ FIT_STATIC_FUNCTION(lookup) = ::fit::pipable(::fit::conditional(
     [] (auto input, auto val,
 
         REQUIRES(
-            detail::is_container<decltype(input)>(),
+            detail::is_container<decltype(input)>::value,
             !detail::is_function_template<decltype(val)>::value
         )
     ) {

@@ -16,7 +16,7 @@ FIT_STATIC_FUNCTION(reduce) = ::fit::pipable(::fit::conditional(
     [] (auto input, auto func,
 
         REQUIRES(
-            detail::is_container<decltype(input)>()
+            detail::is_container<decltype(input)>::value
         )
     ) {
         ::std::remove_reference_t<decltype(*::std::begin(input))> init {};
@@ -31,7 +31,7 @@ FIT_STATIC_FUNCTION(reduce) = ::fit::pipable(::fit::conditional(
     [] (auto input, auto func, auto init,
 
         REQUIRES(
-            detail::is_container<decltype(input)>()
+            detail::is_container<decltype(input)>::value
         )
     ) {
         return ::std::accumulate(

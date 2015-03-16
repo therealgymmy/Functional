@@ -57,10 +57,10 @@ FIT_STATIC_FUNCTION(to) = ::fit::pipable(::fit::conditional(
 
         REQUIRES(detail::and_args(
             detail::or_args(
-                detail::is_sequence_container<decltype(input)>(),
-                detail::is_set<decltype(input)>()
+                detail::is_sequence_container<decltype(input)>::value,
+                detail::is_set<decltype(input)>::value
             ),
-            detail::is_sequence_container<TYPE(factory, input)>()
+            detail::is_sequence_container<TYPE(factory, input)>::value
         ))
     ) {
         TYPE(factory, input) output(input.size());
@@ -72,8 +72,8 @@ FIT_STATIC_FUNCTION(to) = ::fit::pipable(::fit::conditional(
     [] (auto input, auto factory,
 
         REQUIRES(detail::and_args(
-            detail::is_sequence_container<decltype(input)>(),
-            detail::is_set<TYPE(factory, input)>()
+            detail::is_sequence_container<decltype(input)>::value,
+            detail::is_set<TYPE(factory, input)>::value
         ))
     ) {
         TYPE(factory, input) output;

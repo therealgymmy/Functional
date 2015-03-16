@@ -12,6 +12,12 @@ struct Dummy {};
 #define REQUIRES(...) \
     typename ::std::enable_if<(__VA_ARGS__), ::fn::detail::Dummy>::type = {}
 
+#define DEFINE_IS_TEMPLATE(Name, Type) \
+    template <typename C> \
+    struct Name : ::std::false_type {}; \
+    template <typename... Ts> \
+    struct Name<Type<Ts...>>: ::std::true_type {}
+
 #define X_TO_STRING(s) TO_STRING(s)
 #define TO_STRING(s) #s
 

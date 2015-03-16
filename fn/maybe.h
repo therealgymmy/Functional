@@ -3,20 +3,9 @@
 
 #include <stdexcept>
 
+#include "detail/macro.h"
+
 namespace fn {
-
-template <typename T>
-class Maybe;
-
-namespace detail {
-
-template <typename C>
-struct is_maybe : std::false_type {};
-
-template <typename... Ts>
-struct is_maybe<Maybe<Ts...>>: std::true_type {};
-
-}
 
 template <typename T>
 class Maybe {
@@ -56,6 +45,12 @@ auto maybe(T v) {
 template <typename T>
 auto maybe() {
     return Maybe<T>();
+}
+
+namespace detail {
+
+DEFINE_IS_TEMPLATE(is_maybe, Maybe);
+
 }
 
 FIT_STATIC_FUNCTION(ok) = ::fit::pipable(

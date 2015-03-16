@@ -17,7 +17,7 @@ FIT_STATIC_FUNCTION(filter) = ::fit::pipable(::fit::conditional(
     [] (auto input, auto pred,
 
         REQUIRES(
-            detail::is_sequence_container<decltype(input)>()
+            detail::is_sequence_container<decltype(input)>::value
         )
     ) {
         decltype(input) output(input.size());
@@ -37,7 +37,7 @@ FIT_STATIC_FUNCTION(filter) = ::fit::pipable(::fit::conditional(
     [] (auto input, auto pred,
 
         REQUIRES(
-            detail::is_associative_container<decltype(input)>()
+            detail::is_associative_container<decltype(input)>::value
         )
     ) {
         decltype(input) output;

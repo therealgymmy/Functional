@@ -17,7 +17,7 @@ FIT_STATIC_FUNCTION(each) = ::fit::pipable(::fit::conditional(
     [] (auto input, auto func,
 
         REQUIRES(
-            detail::is_container<decltype(input)>()
+            detail::is_container<decltype(input)>::value
         )
     ) {
         for (auto element : input) {
