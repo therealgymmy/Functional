@@ -14,17 +14,17 @@
 namespace fn {
 namespace detail {
 
+template <typename T>
+struct is_template : ::std::false_type {};
+
+template <template <typename...> class Func, typename... Ts>
+struct is_template<Func<Ts...>> : ::std::true_type {};
+
 template <template <typename...> class C1, template <typename...> class C2>
 struct is_same_template : ::std::false_type {};
 
 template <template <typename...> class C>
-struct is_same_template<C, C> : ::std::false_type {};
-
-template <typename T>
-struct is_function_template : ::std::false_type {};
-
-template <template <typename...> class Func, typename... Ts>
-struct is_function_template<Func<Ts...>> : ::std::true_type {};
+struct is_same_template<C, C> : ::std::true_type {};
 
 DEFINE_IS_TEMPLATE(is_array,        ::std::array);
 DEFINE_IS_TEMPLATE(is_deque,        ::std::deque);

@@ -20,7 +20,11 @@ FIT_STATIC_FUNCTION(lookup) = ::fit::pipable(::fit::conditional(
 
         REQUIRES(
             detail::is_container<decltype(input)>::value,
-            detail::is_function_template<decltype(func)>::value
+            detail::is_template<decltype(func)>::value,
+            ::std::is_same<
+                bool,
+                decltype(func(*::std::begin(input)))
+            >::value
         )
     ) {
         auto itr = ::std::find_if(
@@ -45,7 +49,7 @@ FIT_STATIC_FUNCTION(lookup) = ::fit::pipable(::fit::conditional(
 
         REQUIRES(
             detail::is_container<decltype(input)>::value,
-            !detail::is_function_template<decltype(val)>::value
+            !detail::is_template<decltype(val)>::value
         )
     ) {
         auto itr = ::std::find(
