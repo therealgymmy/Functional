@@ -92,16 +92,22 @@ int main() {
     cout << "vector" << endl;
     vector<int> vectorValues = { 1, 2, 3, 4, 5 };
 
+    // bug?
+    // auto comp = _ > 1; // return false regardless of input
+    auto comp = _1 > 1;
+    assert(comp(2) == true);
+    assert(comp(1) == false);
+
     int vectorSum = vectorValues
         | filter(_1 > 1)
         | to(type<set>())
         | to(type<list>())
-        | fmap(_1 * 10)
+        | fmap(_ * 10)
         | each([] (auto val) { cout << val << endl; })
-        | reduce(_1 + _2);
+        | reduce(_ + _);
 
     int vectorLookupByVal  = vectorValues | lookup(4) | ok;
-    int vectorLookupByFunc = vectorValues | lookup(_1 == 4) | ok;
+    int vectorLookupByFunc = vectorValues | lookup(_ == 4) | ok;
     assert(vectorLookupByVal == vectorLookupByFunc);
 
     cout << vectorSum << endl;
@@ -120,9 +126,9 @@ int main() {
 
     int listSum = listValues
         | filter(_1 > 1)
-        | fmap(_1 * 10)
+        | fmap(_ * 10)
         | each([] (auto val) { cout << val << endl; })
-        | reduce(_1 + _2, 1000);
+        | reduce(_ + _, 1000);
 
     cout << listSum << endl;
     cout << endl;
@@ -135,9 +141,9 @@ int main() {
 
     int setSum = setValues
         | filter(_1 > 1)
-        | fmap(_1 * 10)
+        | fmap(_ * 10)
         | each([] (auto val) { cout << val << endl; })
-        | reduce(_1 + _2);
+        | reduce(_ + _);
 
 
     cout << setSum << endl;
@@ -153,9 +159,9 @@ int main() {
 
     int mapSum = mapValues
         | filter(on_map_value(_1 > 1))
-        | fmap(on_map_value(_1 * 10))
+        | fmap(on_map_value(_ * 10))
         | each(on_map_value([] (auto val) { cout << val << endl; }))
-        | reduce(on_map_value(_1 + _2), 1000);
+        | reduce(on_map_value(_ + _), 1000);
 
     cout << mapSum << endl;
     cout << endl;
