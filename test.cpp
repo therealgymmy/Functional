@@ -92,14 +92,8 @@ int main() {
     cout << "vector" << endl;
     vector<int> vectorValues = { 1, 2, 3, 4, 5 };
 
-    // bug?
-    // auto comp = _ > 1; // return false regardless of input
-    auto comp = _1 > 1;
-    assert(comp(2) == true);
-    assert(comp(1) == false);
-
     int vectorSum = vectorValues
-        | filter(_1 > 1)
+        | filter(_ > 1)
         | to(type<set>())
         | to(type<list>())
         | fmap(_ * 10)
@@ -125,7 +119,7 @@ int main() {
     list<int> listValues = { 1, 2, 3, 4, 5 };
 
     int listSum = listValues
-        | filter(_1 > 1)
+        | filter(_ > 1)
         | fmap(_ * 10)
         | each([] (auto val) { cout << val << endl; })
         | reduce(_ + _, 1000);
@@ -140,7 +134,7 @@ int main() {
     set<int> setValues = { 1, 2, 3, 4, 5 };
 
     int setSum = setValues
-        | filter(_1 > 1)
+        | filter(_ > 1)
         | fmap(_ * 10)
         | each([] (auto val) { cout << val << endl; })
         | reduce(_ + _);
@@ -158,7 +152,7 @@ int main() {
           make_pair(4, 4), make_pair(5, 5) };
 
     int mapSum = mapValues
-        | filter(on_map_value(_1 > 1))
+        | filter(on_map_value(_ > 1))
         | fmap(on_map_value(_ * 10))
         | each(on_map_value([] (auto val) { cout << val << endl; }))
         | reduce(on_map_value(_ + _), 1000);
