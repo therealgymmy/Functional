@@ -1,0 +1,6 @@
+[submodule "ext/Fit"]
+	path = ext/Fit
+	url = https://github.com/pfultz2/Fit.git
+[submodule "ext/Tick"]
+	path = ext/Tick
+	url = https://github.com/pfultz2/Tick.git
