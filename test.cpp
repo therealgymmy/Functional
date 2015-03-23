@@ -13,6 +13,7 @@
 #include "fn/lookup.h"
 #include "fn/maybe.h"
 #include "fn/reduce.h"
+#include "fn/take.h"
 #include "fn/to.h"
 
 #include "fit/placeholders.h"
@@ -104,6 +105,12 @@ int main() {
     int vectorLookupByFunc = vectorValues | lookup(_ == 4) | ok;
     assert(vectorLookupByVal == vectorLookupByFunc);
 
+    auto vectorTake2 = vectorValues | take(2);
+    assert(vectorTake2.size() == 2);
+
+    int vectorFirst = vectorValues | first;
+    assert(vectorFirst == 1);
+
     cout << vectorSum << endl;
     cout << endl;
 
@@ -139,6 +146,8 @@ int main() {
         | each([] (auto val) { cout << val << endl; })
         | reduce(_ + _);
 
+    int setFirst = setValues | first;
+    assert(setFirst == 1);
 
     cout << setSum << endl;
     cout << endl;
@@ -156,6 +165,17 @@ int main() {
         | fmap(on_map_value(_ * 10))
         | each(on_map_value([] (auto val) { cout << val << endl; }))
         | reduce(on_map_value(_ + _), 1000);
+
+    auto mapTake2 = mapValues | take(2);
+    assert(mapTake2.size() == 2);
+
+    pair<int, int> mapFirst = mapValues | first;
+    assert(mapFirst.first == 1);
+    assert(mapFirst.second == 1);
+
+    pair<int, int> mapLast = mapValues | last;
+    assert(mapLast.first == 5);
+    assert(mapLast.second == 5);
 
     cout << mapSum << endl;
     cout << endl;
